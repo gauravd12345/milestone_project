@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Completed Goals</h1>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Goal</th>
+        <th>Course</th>
+        <th>Completed (Due / Created)</th>
+        <th>Assignee</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in tasks %}
+        <tr>
+          <td>{{ t.title }}</td>
+          <td>{{ t.course_code or '—' }}</td>
+          <td>{{ t.due_date or t.created_at.date() }}</td>
+          <td>{{ t.assignee.email if t.assignee else 'Unassigned' }}</td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="4">No completed goals yet.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

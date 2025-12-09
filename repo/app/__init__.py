@@ -5,24 +5,29 @@ from .config import Config
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+login_manager.login_view = "auth.login"
 
-def create_app():
+
+def create_app(config_class=Config):
     app = Flask(__name__, static_folder="static", template_folder="templates")
-    app.config.from_object(Config)
+    app.config.from_object(config_class)
 
     db.init_app(app)
     login_manager.init_app(app)
 
-    # Import models so SQLAlchemy sees them
+    # Make sure models are imported before create_all
     from . import models  # noqa: F401
 
     # Blueprints
     from .auth.routes import auth_bp
     from .main.routes import main_bp
+    from .tasks.routes import tasks_bp
+
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(main_bp)
+    # Goals live under /goals
+    app.register_blueprint(tasks_bp, url_prefix="/goals")
 
-    # Create tables (safe in dev; for real apps use migrations)
     with app.app_context():
         db.create_all()
 

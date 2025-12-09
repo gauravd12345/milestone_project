@@ -1,5 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>Welcome</h1>
-  <p>This is the LMS stub home page. Use the nav to explore pages.</p>
+  <h1>Welcome to StudyBuddy</h1>
+  <p>Track your weekly study goals, tag them by course, and see your progress over time.</p>
+
+  {% if current_user.is_authenticated %}
+    <p>
+      <a class="btn" href="{{ url_for('tasks.list_goals') }}">View your goals</a>
+    </p>
+  {% else %}
+    <p>
+      <a class="btn" href="{{ url_for('auth.register') }}">Get started</a>
+    </p>
+  {% endif %}
 {% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Your StudyBuddy Profile</h1>
+
+  <p><strong>Email:</strong> {{ current_user.email }}</p>
+  <p><strong>Total goals:</strong> {{ total }}</p>
+  <p><strong>Completed goals:</strong> {{ completed }}</p>
+
+  <h2>Courses</h2>
+  {% if courses %}
+    <ul>
+      {% for c in courses %}
+        <li>{{ c }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No courses tagged yet.</p>
+  {% endif %}
+{% endblock %}
