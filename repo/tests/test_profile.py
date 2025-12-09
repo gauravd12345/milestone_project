@@ -1,16 +1,15 @@
 from app.models import Task, User, db
 
-
-def login(client, email="test@example.com", password="password123"):
-    return client.post(
+def login_default(client):
+    client.post(
         "/auth/login",
-        data={"email": email, "password": "password123"},
+        data={"email": "test@example.com", "password": "password123"},
         follow_redirects=True,
     )
 
-
 def test_profile_counts_goals(client, app):
-    login(client)
+    login_default(client)
+
     with app.app_context():
         user = User.query.filter_by(email="test@example.com").first()
         g1 = Task(title="G1", status="open", assignee_id=user.id, course_code="CS101")
@@ -19,6 +18,5 @@ def test_profile_counts_goals(client, app):
         db.session.commit()
 
     resp = client.get("/profile")
-    # Very light checks, just ensure page renders & mentions totals
     assert b"Total goals" in resp.data
     assert b"Completed goals" in resp.data

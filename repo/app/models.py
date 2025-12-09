@@ -25,19 +25,20 @@ class User(UserMixin, db.Model):
 
 
 class Task(db.Model):
-    """In code we call it Task, in UI we present it as a 'goal'."""
-
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), nullable=False)
     description = db.Column(db.Text, default="")
-    status = db.Column(db.String(32), default="open")  # open, in_progress, done
+    status = db.Column(db.String(32), default="open")
     due_date = db.Column(db.Date, nullable=True)
-
-    # StudyBuddy: optional course tag like "CS101"
     course_code = db.Column(db.String(64), nullable=True)
-
     assignee_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if self.status is None:
+            self.status = "open"
+
 
 
 class Course(db.Model):  # simple stub for future
