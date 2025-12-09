@@ -11,23 +11,25 @@ StudyBuddy is a lightweight Flask application that helps students set, track, an
 - Pytest (unit testing)
 
 ## Implemented Features (Milestone 2)
-### Core MVP Features (8/12 completed)
+### Core MVP Features (9/12 completed)
 
-- User registration and login
+- User registration and login using Flask-Login
 - Create weekly study goals
-- Edit and update existing goals
-- Tag goals with course identifiers (e.g., "CMPE 131")
-- Mark goals as completed (via status field)
-- View all goals in a styled dashboard
-- View completed goals history
-- View profile summary (total goals, completed goals, and course tags)
+- View goals dashboard
+- Edit and update goals
+- Mark goals as completed using status field
+- Tag goals by course (course_code field)
+- Completed goals page showing all finished tasks
+- Profile page summarizing total goals, completed goals, and course tags
+- Posting progress updates
+
 
 ### Planned for Milestone 3
 
 - Study group membership
-- Viewing peer/group members
-- Posting progress updates on goals
+- Viewing other group members
 - Sending nudges to peers
+
 
 ## Project Structure
 ```repo/
@@ -71,30 +73,30 @@ The included test suite verifies:
 - Completed goals display
 - Profile summaries and course tracking
 
-StudyBuddy includes <b>6 meaningful unit test cases</b> covering authentication, goal creation, editing, completion history, profile logic, and model defaults. All tests pass successfully in M2:
+StudyBuddy includes <b>7 meaningful unit test cases</b> covering authentication, goal creation, editing, completion history, profile logic, and model defaults. All tests pass successfully in M2:
 
-<img width="615" height="271" alt="Screenshot 2025-12-08 at 7 31 00 PM" src="https://github.com/user-attachments/assets/4d96a1c6-9538-4b6e-b221-7e23b43ba43e" />
+<img width="612" height="323" alt="Screenshot 2025-12-08 at 8 37 05 PM" src="https://github.com/user-attachments/assets/0af68177-cdef-48f1-acc5-690b1bb82ff7" />
+
 
 ## Screenshots
 #### Home Page
 
-<img width="1722" height="660" alt="Screenshot 2025-12-08 at 6 50 03 PM" src="https://github.com/user-attachments/assets/46034450-a2eb-4fe5-8a63-11c97c84118c" />
+<img width="1684" height="882" alt="Screenshot 2025-12-08 at 8 30 33 PM" src="https://github.com/user-attachments/assets/a01648ea-92e1-4ddd-97aa-cdd0a835a81b" />
 
 
 #### Goals Dashboard
 
-<img width="1727" height="747" alt="Screenshot 2025-12-08 at 6 50 45 PM" src="https://github.com/user-attachments/assets/aaa07b18-c01e-4776-b1b1-bb3f03a05219" />
+<img width="1685" height="829" alt="Screenshot 2025-12-08 at 8 30 43 PM" src="https://github.com/user-attachments/assets/e6e81fdc-650a-46e8-8301-bb0e3955a7f8" />
 
 
 #### Edit Goal Page
 
-<img width="1728" height="774" alt="Screenshot 2025-12-08 at 6 51 17 PM" src="https://github.com/user-attachments/assets/81f9eca3-770b-4e4d-94b7-31bc2984c56b" />
+<img width="1676" height="781" alt="Screenshot 2025-12-08 at 8 30 58 PM" src="https://github.com/user-attachments/assets/2eea45b2-444c-478b-a272-3cc8c8b3d3b3" />
 
 
 #### Completed Goals
 
-<img width="1728" height="511" alt="Screenshot 2025-12-08 at 6 51 26 PM" src="https://github.com/user-attachments/assets/66a68cf3-2c1d-444d-997d-d6fffd8d515c" />
-
+<img width="1684" height="751" alt="Screenshot 2025-12-08 at 8 31 16 PM" src="https://github.com/user-attachments/assets/40ccdb98-f686-4edc-8eb7-d4af72c047d3" />
 
 ## Milestone 2 Summary
 
@@ -106,7 +108,7 @@ Compared to M1, this milestone introduces:
 - Consistent UI styling with shared templates
 - Working pytest suite with isolated temporary databases
 
-This milestone delivers a functional early version of StudyBuddy, covering over 60–70% of planned MVP features.
+This milestone delivers a functional early version of StudyBuddy, covering 75% of planned MVP features.
 
 ## Roles:
 Gaurav: Responsible for backend development, including Flask routing, SQLAlchemy models, authentication, and goal management logic.
