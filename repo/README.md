@@ -71,10 +71,9 @@ The included test suite verifies:
 - Completed goals display
 - Profile summaries and course tracking
 
-All tests pass successfully in M2:
+StudyBuddy includes <b>6 meaningful unit test cases</b> covering authentication, goal creation, editing, completion history, profile logic, and model defaults. All tests pass successfully in M2:
 
-<img width="609" height="255" alt="Screenshot 2025-12-08 at 7 18 15 PM" src="https://github.com/user-attachments/assets/c5a828b5-2321-4bd4-9439-e275f1e79392" />
-
+<img width="615" height="271" alt="Screenshot 2025-12-08 at 7 31 00 PM" src="https://github.com/user-attachments/assets/4d96a1c6-9538-4b6e-b221-7e23b43ba43e" />
 
 ## Screenshots
 #### Home Page
