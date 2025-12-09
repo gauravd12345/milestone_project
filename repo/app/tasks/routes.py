@@ -33,27 +33,26 @@ def completed():
 def create():
     form = TaskForm()
 
+    # populate assignee choices
     users = User.query.order_by(User.email).all()
-    form.assignee_id.choices = [(-1, "-- Unassigned --")] + [
-        (u.id, u.email) for u in users
-    ]
+    form.assignee_id.choices = [(-1, "Unassigned")] + [(u.id, u.email) for u in users]
 
     if form.validate_on_submit():
-        assignee_id = form.assignee_id.data
-        if assignee_id == -1:
-            assignee_id = None
+        assignee_id = form.assignee_id.data if form.assignee_id.data != -1 else None
 
         goal = Task(
             title=form.title.data,
             description=form.description.data or "",
+            course_code=form.course_code.data or None,
             status=form.status.data,
             due_date=form.due_date.data,
             assignee_id=assignee_id,
-            course_code=form.course_code.data or None,
+            # 🔹 actually save the progress update:
+            progress_note=form.progress_note.data or "",
         )
         db.session.add(goal)
         db.session.commit()
-        flash("Goal created.", "info")
+        flash("Goal created.", "success")
         return redirect(url_for("tasks.list_goals"))
 
     return render_template("tasks/create.html", form=form, title="Create Goal")
@@ -63,12 +62,11 @@ def create():
 @login_required
 def edit(task_id):
     goal = Task.query.get_or_404(task_id)
+
     form = TaskForm(obj=goal)
 
     users = User.query.order_by(User.email).all()
-    form.assignee_id.choices = [(-1, "-- Unassigned --")] + [
-        (u.id, u.email) for u in users
-    ]
+    form.assignee_id.choices = [(-1, "Unassigned")] + [(u.id, u.email) for u in users]
 
     if request.method == "GET":
         form.assignee_id.data = goal.assignee_id or -1
@@ -76,19 +74,19 @@ def edit(task_id):
     if form.validate_on_submit():
         goal.title = form.title.data
         goal.description = form.description.data or ""
+        goal.course_code = form.course_code.data or None
         goal.status = form.status.data
         goal.due_date = form.due_date.data
-
-        assignee_id = form.assignee_id.data
-        goal.assignee_id = None if assignee_id == -1 else assignee_id
-
-        goal.course_code = form.course_code.data or None
+        goal.assignee_id = form.assignee_id.data if form.assignee_id.data != -1 else None
+        # 🔹 update the progress note here:
+        goal.progress_note = form.progress_note.data or ""
 
         db.session.commit()
-        flash("Goal updated.", "info")
+        flash("Goal updated.", "success")
         return redirect(url_for("tasks.list_goals"))
 
-    return render_template("tasks/edit.html", form=form, task=goal, title="Edit Goal")
+    return render_template("tasks/edit.html", form=form, goal=goal, title="Edit Goal")
+
 
 
 @tasks_bp.route("/<int:task_id>/delete", methods=["POST"])

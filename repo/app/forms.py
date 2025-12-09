@@ -8,6 +8,7 @@ from wtforms import (
     SelectField,
 )
 from wtforms.validators import DataRequired, Email, Length, Optional
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectField, DateField, IntegerField
 
 
 class RegisterForm(FlaskForm):
@@ -27,17 +28,21 @@ class LoginForm(FlaskForm):
 
 
 class TaskForm(FlaskForm):
-    title = StringField("Title", validators=[DataRequired(), Length(max=120)])
-    description = TextAreaField("Description", validators=[Optional(), Length(max=2000)])
-    due_date = DateField("Due date", validators=[Optional()], format="%Y-%m-%d")
+    title = StringField("Title", validators=[DataRequired()])
+    description = TextAreaField("Description")
+    course_code = StringField("Course Code")
     status = SelectField(
         "Status",
-        choices=[
-            ("open", "Open"),
-            ("in_progress", "In Progress"),
-            ("done", "Done"),
-        ],
+        choices=[("open", "Open"), ("in_progress", "In Progress"), ("done", "Done")],
+        default="open",
     )
-    assignee_id = SelectField("Assignee", coerce=int, validators=[Optional()])
-    course_code = StringField("Course", validators=[Optional(), Length(max=64)])
-    submit = SubmitField("Save Goal")
+    due_date = DateField("Due Date", format="%Y-%m-%d", validators=[Optional()])
+    assignee_id = SelectField("Assignee", coerce=int)
+
+    progress_note = TextAreaField(
+        "Progress Update (optional)",
+        render_kw={"rows": 3, "placeholder": "E.g., Finished sections 1–3; need to review examples."},
+    )
+
+    submit = SubmitField("Save")
+

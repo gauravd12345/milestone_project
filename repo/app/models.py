@@ -34,10 +34,13 @@ class Task(db.Model):
     assignee_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    progress_note = db.Column(db.Text, default="")
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         if self.status is None:
             self.status = "open"
+
 
 
 

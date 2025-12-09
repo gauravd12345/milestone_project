@@ -39,6 +39,16 @@
               <button class="btn-small danger" type="submit">Delete</button>
             </form>
           </td>
+          <td class="goal-progress">
+            {% if t.progress_note %}
+              <div class="progress-label">Progress:</div>
+              <div class="progress-text">
+                {{ t.progress_note[:80] }}{% if t.progress_note|length > 80 %}…{% endif %}
+              </div>
+            {% else %}
+              <span class="muted">No progress update yet.</span>
+            {% endif %}
+          </td>
         </tr>
       {% else %}
         <tr>
