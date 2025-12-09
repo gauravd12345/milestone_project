@@ -71,7 +71,10 @@ The included test suite verifies:
 - Completed goals display
 - Profile summaries and course tracking
 
-All tests pass successfully in M2.
+All tests pass successfully in M2:
+
+<img width="609" height="255" alt="Screenshot 2025-12-08 at 7 18 15 PM" src="https://github.com/user-attachments/assets/c5a828b5-2321-4bd4-9439-e275f1e79392" />
+
 
 ## Screenshots
 #### Home Page
@@ -105,3 +108,7 @@ Compared to M1, this milestone introduces:
 - Working pytest suite with isolated temporary databases
 
 This milestone delivers a functional early version of StudyBuddy, covering over 60–70% of planned MVP features.
+
+## Roles:
+Gaurav: Responsible for backend development, including Flask routing, SQLAlchemy models, authentication, and goal management logic.
+Brenda: Responsible for frontend design, including UI styling, templates, layout, and improving overall user experience across the app.
