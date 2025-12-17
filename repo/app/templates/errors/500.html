@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Server Error – StudyBuddy{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center py-12">
+  <div class="text-center space-y-4">
+    <h1 class="text-4xl font-extrabold text-slate-800">Something went wrong</h1>
+    <p class="text-lg text-slate-600">
+      We ran into an unexpected error while processing your request.
+    </p>
+    <p class="text-sm text-slate-500">
+      Please try again in a moment. If this keeps happening, contact your instructor.
+    </p>
+    <div class="mt-4 flex items-center justify-center gap-3">
+      <a
+        href="{{ url_for('main.index') }}"
+        class="inline-flex items-center px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
+      >
+        ← Back to Home
+      </a>
+      <button
+        type="button"
+        onclick="window.location.reload();"
+        class="inline-flex items-center px-4 py-2 rounded-md border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50"
+      >
+        Try Again
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,49 +1,157 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-full bg-slate-50">
 <head>
   <meta charset="utf-8" />
   <title>{{ title or "StudyBuddy" }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  {# Tailwind CDN – fine for this class project #}
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  {# Optional: keep your custom CSS too, for any extra tweaks you already had #}
   <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet" />
 </head>
-<body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <a href="{{ url_for('main.index') }}">StudyBuddy</a>
-      </div>
-      <nav class="nav">
-        <a href="{{ url_for('main.index') }}">Home</a>
-        {% if current_user.is_authenticated %}
-          <a href="{{ url_for('tasks.list_goals') }}">Goals</a>
-          <a href="{{ url_for('tasks.completed') }}">Completed</a>
-          <a href="{{ url_for('main.profile') }}">Profile</a>
-        {% endif %}
-      </nav>
-      <div class="user-area">
-        {% if current_user.is_authenticated %}
-          <span class="user-email">{{ current_user.email }}</span>
-          <a href="{{ url_for('auth.logout') }}">Logout</a>
-        {% else %}
-          <a href="{{ url_for('auth.login') }}">Login</a>
-          <a href="{{ url_for('auth.register') }}">Register</a>
-        {% endif %}
-      </div>
-    </div>
-  </header>
-
-  <main class="container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="flashes">
-          {% for category, message in messages %}
-            <div class="flash {{ category }}">{{ message }}</div>
-          {% endfor %}
+<body class="h-full text-slate-900">
+  <div class="min-h-screen flex flex-col">
+    {# Top navigation bar #}
+    <header class="bg-blue-600 text-white shadow">
+      <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <a href="{{ url_for('main.index') }}" class="text-lg font-semibold tracking-tight">
+            StudyBuddy
+          </a>
         </div>
-      {% endif %}
-    {% endwith %}
 
-    {% block content %}{% endblock %}
-  </main>
+        {% set endpoint = request.endpoint or "" %}
+
+        <nav class="hidden sm:flex items-center gap-3 text-sm">
+          <a
+            href="{{ url_for('main.index') }}"
+            class="px-3 py-1 rounded-full transition
+                   {% if endpoint == 'main.index' %}
+                     bg-white text-blue-700 font-semibold
+                   {% else %}
+                     text-blue-100 hover:bg-blue-500/50
+                   {% endif %}"
+          >
+            Home
+          </a>
+
+          {% if current_user.is_authenticated %}
+            <a
+              href="{{ url_for('tasks.list_goals') }}"
+              class="px-3 py-1 rounded-full transition
+                     {% if endpoint.startswith('tasks.') and endpoint != 'tasks.completed' %}
+                       bg-white text-blue-700 font-semibold
+                     {% else %}
+                       text-blue-100 hover:bg-blue-500/50
+                     {% endif %}"
+            >
+              Goals
+            </a>
+
+            <a
+              href="{{ url_for('tasks.completed') }}"
+              class="px-3 py-1 rounded-full transition
+                     {% if endpoint == 'tasks.completed' %}
+                       bg-white text-blue-700 font-semibold
+                     {% else %}
+                       text-blue-100 hover:bg-blue-500/50
+                     {% endif %}"
+            >
+              Completed
+            </a>
+
+            <a
+              href="{{ url_for('main.profile') }}"
+              class="px-3 py-1 rounded-full transition
+                     {% if endpoint == 'main.profile' %}
+                       bg-white text-blue-700 font-semibold
+                     {% else %}
+                       text-blue-100 hover:bg-blue-500/50
+                     {% endif %}"
+            >
+              Profile
+            </a>
+
+            <a
+              href="{{ url_for('groups.list_groups') }}"
+              class="px-3 py-1 rounded-full transition
+                     {% if endpoint.startswith('groups.') %}
+                       bg-white text-blue-700 font-semibold
+                     {% else %}
+                       text-blue-100 hover:bg-blue-500/50
+                     {% endif %}"
+            >
+              Study Groups
+            </a>
+          {% endif %}
+        </nav>
+
+        <div class="flex items-center gap-2 text-xs sm:text-sm">
+          {% if current_user.is_authenticated %}
+            <span class="hidden sm:inline text-blue-100">
+              {{ current_user.email }}
+            </span>
+            <a
+              href="{{ url_for('auth.logout') }}"
+              class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-medium"
+            >
+              Logout
+            </a>
+          {% else %}
+            <a
+              href="{{ url_for('auth.login') }}"
+              class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-medium"
+            >
+              Login
+            </a>
+            <a
+              href="{{ url_for('auth.register') }}"
+              class="px-3 py-1 rounded-full bg-white text-blue-700 text-xs sm:text-sm font-semibold"
+            >
+              Register
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 w-full">
+      <div class="max-w-5xl mx-auto px-4 py-6 space-y-4">
+        {# Flash messages with Tailwind colors #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="space-y-2">
+              {% for category, message in messages %}
+                {% set cat = 'danger' if category == 'error' else category %}
+                {% if cat == 'success' %}
+                  {% set classes = 'border-green-200 bg-green-50 text-green-800' %}
+                {% elif cat == 'info' %}
+                  {% set classes = 'border-sky-200 bg-sky-50 text-sky-800' %}
+                {% elif cat == 'warning' %}
+                  {% set classes = 'border-amber-200 bg-amber-50 text-amber-800' %}
+                {% elif cat == 'danger' %}
+                  {% set classes = 'border-red-200 bg-red-50 text-red-800' %}
+                {% else %}
+                  {% set classes = 'border-slate-200 bg-slate-50 text-slate-800' %}
+                {% endif %}
+
+                <div class="border {{ classes }} px-4 py-2 rounded-md text-sm flex items-start gap-2">
+
+                  <p>{{ message }}</p>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        {# Optional breadcrumbs – child templates can override this block #}
+        {% block breadcrumb %}{% endblock %}
+
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+  </div>
 </body>
 </html>

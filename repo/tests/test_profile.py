@@ -19,4 +19,5 @@ def test_profile_counts_goals(client, app):
 
     resp = client.get("/profile")
     assert b"Total goals" in resp.data
-    assert b"Completed goals" in resp.data
+    assert b"Completion rate" in resp.data
+

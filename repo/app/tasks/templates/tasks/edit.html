@@ -1,55 +1,119 @@
 {% extends "base.html" %}
-{% block content %}
-  <h1>Edit Goal</h1>
+{% block title %}Edit Goal – StudyBuddy{% endblock %}
 
-  <form method="POST" novalidate>
+{% block breadcrumb %}
+<nav class="text-xs text-slate-500 flex items-center gap-1 mb-2">
+  <a href="{{ url_for('main.index') }}" class="hover:text-slate-700">Home</a>
+  <span>/</span>
+  <a href="{{ url_for('tasks.list_goals') }}" class="hover:text-slate-700">Goals</a>
+  <span>/</span>
+  <span class="font-medium text-slate-700">Edit</span>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl">
+  <h1 class="text-xl font-semibold text-slate-900 mb-3">Edit Goal</h1>
+  <p class="text-sm text-slate-500 mb-4">
+    Update the details of this goal, including its status and latest progress update.
+  </p>
+
+  <form method="POST" novalidate
+        class="space-y-4 bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
     {{ form.hidden_tag() }}
 
-    <div class="form-field">
-      <label>Title</label>
-      {{ form.title(class="input") }}
-      {% for e in form.title.errors %}<div class="error">{{ e }}</div>{% endfor %}
-    </div>
-
-    <div class="form-field">
-      <label>Description</label>
-      {{ form.description(class="input") }}
-      {% for e in form.description.errors %}<div class="error">{{ e }}</div>{% endfor %}
-    </div>
-
-    <div class="form-field">
-      <label>Course</label>
-      {{ form.course_code(class="input") }}
-      {% for e in form.course_code.errors %}<div class="error">{{ e }}</div>{% endfor %}
-    </div>
-
-    <div class="form-field">
-      <label>Due date</label>
-      {{ form.due_date(class="input") }}
-      {% for e in form.due_date.errors %}<div class="error">{{ e }}</div>{% endfor %}
-    </div>
-
-    <div class="form-field">
-      <label>Status</label>
-      {{ form.status(class="input") }}
-      {% for e in form.status.errors %}<div class="error">{{ e }}</div>{% endfor %}
-    </div>
-    
-    <div class="form-group">
-      <label for="progress_note">Progress Update (optional)</label>
-      {{ form.progress_note(class="input", id="progress_note") }}
-      {% for error in form.progress_note.errors %}
-        <p class="form-error">{{ error }}</p>
+    <div>
+      <label class="block text-sm font-medium text-slate-700 mb-1">Title</label>
+      {{ form.title(
+          class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      ) }}
+      {% for e in form.title.errors %}
+        <p class="mt-1 text-xs text-red-600">{{ e }}</p>
       {% endfor %}
     </div>
 
-
-    <div class="form-field">
-      <label>Assignee</label>
-      {{ form.assignee_id(class="input") }}
-      {% for e in form.assignee_id.errors %}<div class="error">{{ e }}</div>{% endfor %}
+    <div>
+      <label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
+      {{ form.description(
+          class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      ) }}
+      {% for e in form.description.errors %}
+        <p class="mt-1 text-xs text-red-600">{{ e }}</p>
+      {% endfor %}
     </div>
 
-    {{ form.submit(class="btn") }}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Course</label>
+        {{ form.course_code(
+            class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        ) }}
+        {% for e in form.course_code.errors %}
+          <p class="mt-1 text-xs text-red-600">{{ e }}</p>
+        {% endfor %}
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Due date</label>
+        {{ form.due_date(
+            class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        ) }}
+        {% for e in form.due_date.errors %}
+          <p class="mt-1 text-xs text-red-600">{{ e }}</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div>
+      <label for="progress_note" class="block text-sm font-medium text-slate-700 mb-1">
+        Progress Update (optional)
+      </label>
+      {{ form.progress_note(
+          class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
+          id="progress_note"
+      ) }}
+      {% for error in form.progress_note.errors %}
+        <p class="mt-1 text-xs text-red-600">{{ error }}</p>
+      {% endfor %}
+      <p class="mt-1 text-xs text-slate-500">
+        Add a quick note about what you’ve completed or what’s left.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Status</label>
+        {{ form.status(
+            class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        ) }}
+        {% for e in form.status.errors %}
+          <p class="mt-1 text-xs text-red-600">{{ e }}</p>
+        {% endfor %}
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Assignee</label>
+        {{ form.assignee_id(
+            class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        ) }}
+        {% for e in form.assignee_id.errors %}
+          <p class="mt-1 text-xs text-red-600">{{ e }}</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="flex justify-end pt-2">
+      {{ form.submit(
+          class="inline-flex items-center px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 cursor-pointer"
+      ) }}
+    </div>
   </form>
+</div>
 {% endblock %}

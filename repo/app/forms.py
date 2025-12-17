@@ -46,3 +46,23 @@ class TaskForm(FlaskForm):
 
     submit = SubmitField("Save")
 
+class StudyGroupForm(FlaskForm):
+    name = StringField(
+        "Group Name",
+        validators=[DataRequired(), Length(min=3, max=64)],
+    )
+    description = TextAreaField("Description")
+    submit = SubmitField("Create Group")
+
+
+class JoinGroupForm(FlaskForm):
+    name = StringField(
+        "Group Name",
+        validators=[DataRequired(), Length(min=3, max=64)],
+    )
+    submit = SubmitField("Join Group")
+
+
+class NudgeForm(FlaskForm):
+    message = StringField("Message", validators=[Length(max=255)])
+    submit = SubmitField("Send Nudge")

@@ -1,19 +1,112 @@
 {% extends "base.html" %}
+{% block title %}Your Profile – StudyBuddy{% endblock %}
+
+{% block breadcrumb %}
+<nav class="text-xs text-slate-500 flex items-center gap-1 mb-2">
+  <a href="{{ url_for('main.index') }}" class="hover:text-slate-700">Home</a>
+  <span>/</span>
+  <span class="font-medium text-slate-700">Profile</span>
+</nav>
+{% endblock %}
+
 {% block content %}
-  <h1>Your StudyBuddy Profile</h1>
+{% set pct = (completed / total * 100) if total else 0 %}
 
-  <p><strong>Email:</strong> {{ current_user.email }}</p>
-  <p><strong>Total goals:</strong> {{ total }}</p>
-  <p><strong>Completed goals:</strong> {{ completed }}</p>
+<div class="grid gap-6 md:grid-cols-[1.6fr,1.1fr] items-start">
+  {# LEFT: main profile + progress #}
+  <section class="bg-white border border-slate-200 rounded-lg p-5 shadow-sm space-y-4">
+    <div class="flex items-start justify-between gap-3">
+      <div>
+        <h1 class="text-xl font-semibold text-slate-900">
+          Your StudyBuddy Profile
+        </h1>
+        <p class="text-xs text-slate-500 mt-1">
+          Overview of your study goals and progress.
+        </p>
+      </div>
+      <div class="hidden sm:flex flex-col items-end text-xs text-slate-500">
+        <span class="uppercase tracking-wide text-[0.6rem] text-slate-400">
+          Member
+        </span>
+        <span class="font-medium text-slate-700">
+          {{ current_user.email }}
+        </span>
+      </div>
+    </div>
 
-  <h2>Courses</h2>
-  {% if courses %}
-    <ul>
-      {% for c in courses %}
-        <li>{{ c }}</li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No courses tagged yet.</p>
-  {% endif %}
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+      <div class="rounded-lg border border-slate-100 bg-slate-50 px-3 py-2.5">
+        <p class="text-[0.7rem] uppercase tracking-wide text-slate-500 mb-1">
+          Total goals
+        </p>
+        <p class="text-lg font-semibold text-slate-900">{{ total }}</p>
+      </div>
+      <div class="rounded-lg border border-emerald-100 bg-emerald-50 px-3 py-2.5">
+        <p class="text-[0.7rem] uppercase tracking-wide text-emerald-700 mb-1">
+          Completed
+        </p>
+        <p class="text-lg font-semibold text-emerald-800">{{ completed }}</p>
+      </div>
+      <div class="rounded-lg border border-sky-100 bg-sky-50 px-3 py-2.5">
+        <p class="text-[0.7rem] uppercase tracking-wide text-sky-700 mb-1">
+          Completion rate
+        </p>
+        <p class="text-lg font-semibold text-sky-900">
+          {{ "%.0f"|format(pct) }}%
+        </p>
+      </div>
+    </div>
+
+    <div class="pt-1 space-y-2">
+      <p class="text-xs text-slate-500">
+        You’ve completed
+        <span class="font-semibold text-slate-800">{{ completed }}</span>
+        out of
+        <span class="font-semibold text-slate-800">{{ total }}</span>
+        goals.
+      </p>
+
+      <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+        <div
+          class="h-2 rounded-full bg-gradient-to-r from-emerald-500 to-blue-500 transition-all"
+          style="width: {{ pct if pct <= 100 else 100 }}%;"
+        ></div>
+      </div>
+    </div>
+  </section>
+
+  {# RIGHT: courses summary #}
+  <section class="bg-white border border-slate-200 rounded-lg p-5 shadow-sm space-y-3">
+    <div class="flex items-center justify-between gap-2">
+      <h2 class="text-sm font-semibold text-slate-800">
+        Courses
+      </h2>
+      {% if courses %}
+        <span class="text-[0.7rem] uppercase tracking-wide text-slate-400">
+          {{ courses|length }} course{{ '' if courses|length == 1 else 's' }}
+        </span>
+      {% endif %}
+    </div>
+
+    {% if courses %}
+      <p class="text-xs text-slate-500">
+        These are the course codes you’ve used on your goals.
+      </p>
+      <ul class="flex flex-wrap gap-2 text-xs">
+        {% for c in courses %}
+          <li class="inline-flex items-center px-3 py-1 rounded-full bg-slate-50 text-slate-800 border border-slate-200">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1.5"></span>
+            {{ c }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-sm text-slate-500">
+        No courses tagged yet. Add a
+        <span class="font-medium">course code</span>
+        when creating or editing goals to see them summarized here.
+      </p>
+    {% endif %}
+  </section>
+</div>
 {% endblock %}

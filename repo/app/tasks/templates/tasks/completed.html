@@ -1,29 +1,53 @@
 {% extends "base.html" %}
-{% block content %}
-  <h1>Completed Goals</h1>
+{% block title %}Completed Goals – StudyBuddy{% endblock %}
 
-  <table class="table">
-    <thead>
+{% block breadcrumb %}
+<nav class="text-xs text-slate-500 flex items-center gap-1 mb-2">
+  <a href="{{ url_for('main.index') }}" class="hover:text-slate-700">Home</a>
+  <span>/</span>
+  <span class="font-medium text-slate-700">Completed Goals</span>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="mb-4 flex items-center justify-between">
+  <h1 class="text-xl font-semibold text-slate-900">Completed Goals</h1>
+</div>
+
+<div class="overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-sm">
+  <table class="min-w-full text-sm">
+    <thead class="bg-slate-50 border-b border-slate-200">
       <tr>
-        <th>Goal</th>
-        <th>Course</th>
-        <th>Completed (Due / Created)</th>
-        <th>Assignee</th>
+        <th class="px-4 py-2 text-left font-semibold text-slate-700">Goal</th>
+        <th class="px-4 py-2 text-left font-semibold text-slate-700">Course</th>
+        <th class="px-4 py-2 text-left font-semibold text-slate-700">Completed (Due / Created)</th>
+        <th class="px-4 py-2 text-left font-semibold text-slate-700">Assignee</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="divide-y divide-slate-100">
       {% for t in tasks %}
-        <tr>
-          <td>{{ t.title }}</td>
-          <td>{{ t.course_code or '—' }}</td>
-          <td>{{ t.due_date or t.created_at.date() }}</td>
-          <td>{{ t.assignee.email if t.assignee else 'Unassigned' }}</td>
+        <tr class="hover:bg-slate-50">
+          <td class="px-4 py-2 text-slate-800">
+            {{ t.title }}
+          </td>
+          <td class="px-4 py-2 text-slate-600">
+            {{ t.course_code or '—' }}
+          </td>
+          <td class="px-4 py-2 text-slate-600">
+            {{ t.due_date or t.created_at.date() }}
+          </td>
+          <td class="px-4 py-2 text-slate-600">
+            {{ t.assignee.email if t.assignee else 'Unassigned' }}
+          </td>
         </tr>
       {% else %}
         <tr>
-          <td colspan="4">No completed goals yet.</td>
+          <td colspan="4" class="px-4 py-4 text-center text-sm text-slate-500">
+            No completed goals yet.
+          </td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
+</div>
 {% endblock %}

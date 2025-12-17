@@ -1,60 +1,111 @@
 {% extends "base.html" %}
+{% block title %}Your Goals – StudyBuddy{% endblock %}
+
+{% block breadcrumb %}
+<nav class="text-xs text-slate-500 flex items-center gap-1 mb-2">
+  <a href="{{ url_for('main.index') }}" class="hover:text-slate-700">Home</a>
+  <span>/</span>
+  <span class="font-medium text-slate-700">Goals</span>
+</nav>
+{% endblock %}
+
 {% block content %}
-  <h1>Your Goals</h1>
+<div class="flex items-center justify-between mb-4">
+  <h1 class="text-xl font-semibold text-slate-900">Your Goals</h1>
+  <a
+    class="inline-flex items-center px-3 py-1.5 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
+    href="{{ url_for('tasks.create') }}"
+  >
+    + Create Goal
+  </a>
+</div>
 
-  <p>
-    <a class="btn" href="{{ url_for('tasks.create') }}">+ Create Goal</a>
-  </p>
-
-  <table class="table">
-    <thead>
+<div class="overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-sm">
+  <table class="min-w-full text-sm">
+    <thead class="bg-slate-50 border-b border-slate-200">
       <tr>
-        <th>Goal</th>
-        <th>Course</th>
-        <th>Status</th>
-        <th>Due</th>
-        <th>Assignee</th>
-        <th>Actions</th>
+        <th class="px-4 py-2 text-left font-semibold text-slate-700">Goal</th>
+        <th class="px-4 py-2 text-left font-semibold text-slate-700">Course</th>
+        <th class="px-4 py-2 text-left font-semibold text-slate-700">Status</th>
+        <th class="px-4 py-2 text-left font-semibold text-slate-700">Due</th>
+        <th class="px-4 py-2 text-left font-semibold text-slate-700">Assignee</th>
+        <th class="px-4 py-2 text-left font-semibold text-slate-700">Actions</th>
+        <th class="px-4 py-2 text-left font-semibold text-slate-700">Progress</th>
       </tr>
     </thead>
-
-    <tbody>
+    <tbody class="divide-y divide-slate-100">
       {% for t in tasks %}
-        <tr>
-          <td>{{ t.title }}</td>
-          <td>{{ t.course_code or '—' }}</td>
-          <td>{{ t.status }}</td>
-          <td>{{ t.due_date or '—' }}</td>
-          <td>
+        <tr class="hover:bg-slate-50 align-top">
+          <td class="px-4 py-2 text-slate-800">
+            {{ t.title }}
+          </td>
+          <td class="px-4 py-2 text-slate-600">
+            {{ t.course_code or '—' }}
+          </td>
+          <td class="px-4 py-2">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs
+                          {% if t.status == 'done' or t.status == 'completed' %}
+                            bg-emerald-50 text-emerald-700 border border-emerald-200
+                          {% elif t.status == 'open' %}
+                            bg-sky-50 text-sky-700 border border-sky-200
+                          {% else %}
+                            bg-slate-50 text-slate-700 border border-slate-200
+                          {% endif %}">
+              {{ t.status }}
+            </span>
+          </td>
+          <td class="px-4 py-2 text-slate-600">
+            {{ t.due_date or '—' }}
+          </td>
+          <td class="px-4 py-2 text-slate-600">
             {% if t.assignee %}
               {{ t.assignee.email }}
             {% else %}
-              <span class="tag">Unassigned</span>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs border border-slate-200">
+                Unassigned
+              </span>
             {% endif %}
           </td>
-          <td>
-            <a href="{{ url_for('tasks.edit', task_id=t.id) }}">Edit</a>
-            <form style="display:inline" method="POST"
-                  action="{{ url_for('tasks.delete', task_id=t.id) }}">
-              <button class="btn-small danger" type="submit">Delete</button>
-            </form>
+          <td class="px-4 py-2 text-slate-600">
+            <div class="flex items-center gap-2">
+              <a
+                href="{{ url_for('tasks.edit', task_id=t.id) }}"
+                class="text-blue-600 hover:underline text-xs font-medium"
+              >
+                Edit
+              </a>
+              <form method="POST"
+                    action="{{ url_for('tasks.delete', task_id=t.id) }}">
+                <button
+                  class="inline-flex items-center px-2 py-0.5 rounded-md bg-red-50 text-red-600 border border-red-200 text-xs font-medium hover:bg-red-100"
+                  type="submit"
+                >
+                  Delete
+                </button>
+              </form>
+            </div>
           </td>
-          <td class="goal-progress">
+          <td class="px-4 py-2 text-slate-600">
             {% if t.progress_note %}
-              <div class="progress-label">Progress:</div>
-              <div class="progress-text">
-                {{ t.progress_note[:80] }}{% if t.progress_note|length > 80 %}…{% endif %}
+              <div class="text-xs">
+                <div class="text-slate-500 mb-0.5">Progress:</div>
+                <div class="text-slate-700">
+                  {{ t.progress_note[:80] }}{% if t.progress_note|length > 80 %}…{% endif %}
+                </div>
               </div>
             {% else %}
-              <span class="muted">No progress update yet.</span>
+              <span class="text-xs text-slate-400">No progress update yet.</span>
             {% endif %}
           </td>
         </tr>
       {% else %}
         <tr>
-          <td colspan="6">No goals yet.</td>
+          <td colspan="7" class="px-4 py-4 text-center text-sm text-slate-500">
+            No goals yet. Create your first weekly study goal to get started.
+          </td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
+</div>
 {% endblock %}

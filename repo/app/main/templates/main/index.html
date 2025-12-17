@@ -1,15 +1,64 @@
 {% extends "base.html" %}
-{% block content %}
-  <h1>Welcome to StudyBuddy</h1>
-  <p>Track your weekly study goals, tag them by course, and see your progress over time.</p>
+{% block title %}StudyBuddy – Stay on top of your goals{% endblock %}
 
-  {% if current_user.is_authenticated %}
-    <p>
-      <a class="btn" href="{{ url_for('tasks.list_goals') }}">View your goals</a>
+{% block content %}
+<div class="grid gap-6 md:grid-cols-[2fr,1.2fr] items-start">
+  <section class="space-y-4">
+    <h1 class="text-2xl md:text-3xl font-semibold text-slate-900">
+      Welcome to StudyBuddy
+    </h1>
+    <p class="text-sm md:text-base text-slate-600">
+      Set weekly goals, tag them by course, and track your progress over time.
+      StudyBuddy helps you build consistent study habits instead of cramming.
     </p>
-  {% else %}
-    <p>
-      <a class="btn" href="{{ url_for('auth.register') }}">Get started</a>
-    </p>
-  {% endif %}
+
+    {% if current_user.is_authenticated %}
+      <div class="mt-4">
+        <a
+          href="{{ url_for('tasks.list_goals') }}"
+          class="inline-flex items-center px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
+        >
+          View your goals
+        </a>
+      </div>
+    {% else %}
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a
+          href="{{ url_for('auth.register') }}"
+          class="inline-flex items-center px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
+        >
+          Get started
+        </a>
+        <a
+          href="{{ url_for('auth.login') }}"
+          class="inline-flex items-center px-4 py-2 rounded-md border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50"
+        >
+          I already have an account
+        </a>
+      </div>
+    {% endif %}
+  </section>
+
+  <section class="space-y-3 bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
+    <h2 class="text-sm font-semibold text-slate-800">What you can do</h2>
+    <ul class="space-y-2 text-sm text-slate-600">
+      <li class="flex gap-2">
+        <span class="mt-0.5 text-blue-500">•</span>
+        <span>Create weekly study goals with due dates and course tags.</span>
+      </li>
+      <li class="flex gap-2">
+        <span class="mt-0.5 text-blue-500">•</span>
+        <span>Mark goals as completed and keep a history of finished work.</span>
+      </li>
+      <li class="flex gap-2">
+        <span class="mt-0.5 text-blue-500">•</span>
+        <span>Post quick progress updates (e.g., “Finished notes for Ch. 3”).</span>
+      </li>
+      <li class="flex gap-2">
+        <span class="mt-0.5 text-blue-500">•</span>
+        <span>Join study groups and send nudges to keep peers accountable.</span>
+      </li>
+    </ul>
+  </section>
+</div>
 {% endblock %}
