@@ -15,42 +15,34 @@ class User(UserMixin, db.Model):
     role = db.Column(db.String(50), default="student")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # NEW: optional Canvas/LMS course URL
+    canvas_url = db.Column(db.String(255), nullable=True)
+
     goals = db.relationship("Task", backref="assignee", lazy=True)
-        # --- Study group relationships ---
+
+    # these relationships were already implied by your models:
     owned_groups = db.relationship(
         "StudyGroup",
         back_populates="owner",
         lazy=True,
     )
-
     group_memberships = db.relationship(
         "GroupMembership",
         back_populates="user",
-        cascade="all, delete-orphan",
         lazy=True,
     )
-
     sent_nudges = db.relationship(
         "Nudge",
         foreign_keys="Nudge.sender_id",
         back_populates="sender",
-        cascade="all, delete-orphan",
         lazy=True,
     )
-
     received_nudges = db.relationship(
         "Nudge",
         foreign_keys="Nudge.recipient_id",
         back_populates="recipient",
-        cascade="all, delete-orphan",
         lazy=True,
     )
-
-    @property
-    def groups(self):
-        """Convenience: list of StudyGroup objects this user belongs to."""
-        return [m.group for m in self.group_memberships]
-
 
     def set_password(self, raw: str) -> None:
         self.password_hash = generate_password_hash(raw)

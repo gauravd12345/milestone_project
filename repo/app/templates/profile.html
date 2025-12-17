@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+  <!-- Page header -->
+  <div class="flex items-center justify-between gap-3">
+    <div>
+      <h1 class="text-xl font-semibold text-slate-900">
+        Your StudyBuddy Profile
+      </h1>
+      <p class="text-sm text-slate-500">
+        Overview of your goals, progress, and connected tools.
+      </p>
+    </div>
+  </div>
+
+  <!-- Top cards: basic stats + streak -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <!-- Email -->
+    <section class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
+      <h2 class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+        Account
+      </h2>
+      <p class="mt-2 text-sm text-slate-900 break-all">
+        {{ current_user.email }}
+      </p>
+    </section>
+
+    <!-- Total goals -->
+    <section class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
+      <h2 class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+        Total goals
+      </h2>
+      <p class="mt-2 text-2xl font-semibold text-slate-900">
+        {{ total }}
+      </p>
+      <p class="mt-1 text-xs text-slate-500">
+        Across all courses.
+      </p>
+    </section>
+
+    <!-- Completed goals -->
+    <section class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
+        <h2 class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Completed goals
+        </h2>
+        <p class="mt-2 text-2xl font-semibold text-emerald-600">
+            {{ completed }}
+        </p>
+
+        {% set rate = (completed * 100 // total) if total > 0 else 0 %}
+
+        <p class="mt-1 text-xs text-slate-500">
+            Completion rate: {{ rate }}%
+        </p>
+    </section>
+
+  </div>
+
+  <!-- Streak + activity chart -->
+  <section class="bg-white border border-slate-200 rounded-lg p-5 shadow-sm space-y-4">
+    <div class="flex items-center justify-between gap-2">
+      <div>
+        <h2 class="text-sm font-semibold text-slate-800">
+          Study streak &amp; activity
+        </h2>
+        <p class="text-xs text-slate-500">
+          Based on days where you created goals.
+        </p>
+      </div>
+      <div class="text-right">
+        <p class="text-xs uppercase tracking-wide text-slate-500">
+          Current streak
+        </p>
+        <p class="text-xl font-semibold text-blue-600">
+          {{ streak or 0 }}
+          <span class="text-sm text-slate-500">
+            day{% if (streak or 0) != 1 %}s{% endif %}
+          </span>
+        </p>
+      </div>
+    </div>
+
+    {% if activity %}
+      <div class="mt-2 flex items-end gap-3">
+        {% for label, count in activity %}
+          <div class="flex flex-col items-center gap-1">
+            <div class="w-6 h-16 rounded-full bg-blue-100 flex items-end overflow-hidden">
+              {% set h = 4 + (count * 8) %}
+              <div class="w-full bg-blue-500" style="height: {{ h }}px;"></div>
+            </div>
+            <span class="text-[0.65rem] text-slate-500">{{ label }}</span>
+            <span class="text-[0.65rem] text-slate-600">{{ count }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-xs text-slate-500 mt-1">
+        No recent activity yet. Create a goal to start building your streak.
+      </p>
+    {% endif %}
+  </section>
+
+  <!-- Courses -->
+  <section class="bg-white border border-slate-200 rounded-lg p-5 shadow-sm space-y-3">
+    <div class="flex items-center justify-between gap-2">
+      <h2 class="text-sm font-semibold text-slate-800">
+        Courses
+      </h2>
+      {% if courses %}
+        <span class="text-[0.7rem] uppercase tracking-wide text-slate-400">
+          {{ courses|length }} course{% if courses|length != 1 %}s{% endif %}
+        </span>
+      {% endif %}
+    </div>
+
+    {% if courses %}
+      <p class="text-xs text-slate-500 mb-1">
+        These are the course codes you’ve used on your goals.
+      </p>
+      <ul class="flex flex-wrap gap-2 text-xs">
+        {% for c in courses %}
+          <li class="inline-flex items-center px-3 py-1 rounded-full bg-slate-50 text-slate-800 border border-slate-200">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1.5"></span>
+            {{ c }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-xs text-slate-500">
+        No courses tagged yet. Add a course code when you create goals to see them here.
+      </p>
+    {% endif %}
+  </section>
+
+  <!-- LMS (Canvas) connection -->
+  <section class="bg-white border border-slate-200 rounded-lg p-5 shadow-sm space-y-3">
+    <div class="flex items-center justify-between gap-2">
+      <div>
+        <h2 class="text-sm font-semibold text-slate-800">
+          Connected LMS (Canvas)
+        </h2>
+        <p class="text-xs text-slate-500">
+          Store a link to your Canvas course so you can jump there from StudyBuddy.
+        </p>
+      </div>
+    </div>
+
+    <form method="POST" class="space-y-3">
+      {{ lms_form.hidden_tag() }}
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+          Canvas course URL
+        </label>
+        {{ lms_form.canvas_url(
+          class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        ) }}
+        {% for e in lms_form.canvas_url.errors %}
+          <p class="mt-1 text-xs text-red-600">{{ e }}</p>
+        {% endfor %}
+
+        {% if current_user.canvas_url %}
+          <p class="mt-1 text-xs text-slate-500">
+            Saved link:
+            <a href="{{ current_user.canvas_url }}" class="text-blue-600 hover:underline" target="_blank" rel="noopener">
+              Open Canvas course
+            </a>
+          </p>
+        {% endif %}
+      </div>
+
+      <div class="flex justify-end">
+        {{ lms_form.submit(
+          class="inline-flex items-center px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 cursor-pointer"
+        ) }}
+      </div>
+    </form>
+  </section>
+</div>
+{% endblock %}

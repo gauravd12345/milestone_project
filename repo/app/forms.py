@@ -66,3 +66,11 @@ class JoinGroupForm(FlaskForm):
 class NudgeForm(FlaskForm):
     message = StringField("Message", validators=[Length(max=255)])
     submit = SubmitField("Send Nudge")
+
+
+class LMSConnectForm(FlaskForm):
+    canvas_url = StringField(
+        "Canvas course URL",
+        validators=[Optional(), Length(max=255)],
+    )
+    submit = SubmitField("Save LMS Settings")
