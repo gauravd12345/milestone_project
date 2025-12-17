@@ -1,115 +1,169 @@
-# StudyBuddy – Milestone 2
+# StudyBuddy
 
-StudyBuddy is a lightweight Flask application that helps students set, track, and complete weekly academic goals. Unlike traditional LMS tools that focus on grades and content delivery, StudyBuddy emphasizes habit-building, weekly goal-setting, and personal accountability. This M2 prototype implements the majority of the MVP feature set, including authentication, goal management, course tagging, and progress tracking.
+StudyBuddy is a lightweight Flask application that helps students set, track, and complete weekly academic goals. Unlike traditional LMS tools that emphasize grades and content delivery, StudyBuddy focuses on habit-building, weekly goal-setting, accountability, and peer encouragement. The M3 release implements **100% of the MVP feature set**, a redesigned TailwindCSS UI, analytics, study groups with nudges, and a comprehensive test suite with 91% coverage.
+
 
 ## Tech Stack
 
-- Flask (web framework)
-- Flask-Login (authentication/session handling)
-- Flask-WTF / WTForms (form handling + validation)
-- SQLAlchemy + SQLite (database persistence)
-- Pytest (unit testing)
-
-## Implemented Features (Milestone 2)
-### Core MVP Features (9/12 completed)
-
-- User registration and login using Flask-Login
-- Create weekly study goals
-- View goals dashboard
-- Edit and update goals
-- Mark goals as completed using status field
-- Tag goals by course (course_code field)
-- Completed goals page showing all finished tasks
-- Profile page summarizing total goals, completed goals, and course tags
-- Posting progress updates
+* **Flask** – backend framework
+* **Flask-Login** – authentication + session handling
+* **Flask-WTF / WTForms** – form handling + validation
+* **SQLAlchemy + SQLite** – ORM and persistent storage
+* **TailwindCSS** – full UI design and styling
+* **Pytest + pytest-cov** – unit tests, integration tests, coverage reports
 
 
-### Planned for Milestone 3
+# **Implemented Features (Milestone 3)**
 
-- Study group membership
-- Viewing other group members
-- Sending nudges to peers
+## **Core MVP Features (12 / 12 Complete)**
+
+1. User registration
+2. User login
+3. User logout
+4. Create weekly goals
+5. Edit/update goals
+6. Delete goals
+7. View goals dashboard
+8. Completed goals page
+9. Progress reflections (progress_note)
+10. Tag goals by course
+11. Profile summary (total goals, completed goals, courses)
+12. Authentication-protected routes
+
+## **Additional Required MVP Features (M3)**
+
+* Study group membership
+* View other group members
+* Send nudges to peers
+
+## **Stretch Goals Achieved**
+
+* Reflection prompts integrated into goal creation/editing
+* Study streak tracking
+* 7-day activity analytics chart
+* Canvas LMS connection (save and open course URL)
 
 
-## Project Structure
-```repo/
-  app/
-    auth/          # login, logout, registration
-    main/          # homepage, profile page
-    tasks/         # create/edit/delete goals
-    static/        # global stylesheets
-    templates/     # shared + page templates
-    models.py      # User, Task models
-    forms.py       # WTForms classes
-    config.py
-    __init__.py
-  tests/
-    conftest.py
-    test_auth.py
-    test_goals.py
-    test_profile.py
-  run.py
-  requirements.txt
-  README.md
+# **Project Structure**
+
+```
+app/
+  auth/              # registration, login, logout  
+  main/              # home, profile, analytics  
+  tasks/             # goal create/edit/delete  
+  groups/            # study groups + nudges  
+  templates/         # all HTML templates (Tailwind)  
+  static/            # styles.css  
+  models.py          # User, Task, StudyGroup, Nudge, etc.  
+  forms.py           # WTForms  
+  config.py  
+  __init__.py  
+
+tests/
+  test_auth.py
+  test_goals.py
+  test_goals_edit.py
+  test_profile.py
+  test_progress_update.py
+  test_integration_auth.py
+  test_integration_goals.py
+  test_integration_groups.py
+  test_permissions.py
+  test_404.py
+
+run.py
+requirements.txt
+README.md
 ```
 
-## Running the App (Development)
-```python -m venv .venv
+
+# **Running the Application**
+
+```bash
 source .venv/bin/activate     # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-python run.py                 # or: flask run """ 
+flask run
 ```
 
-The app will be available at: ```http://127.0.0.1:5000/```
+The app will be available at:
+**[http://127.0.0.1:5000/](http://127.0.0.1:5000/)**
 
-If your browser shows a 403 error due to caching, open localhost in an incognito window.
-
-## Running Tests
-```Run the following command in milestone1/repo/: pytest -v``` 
-
-The included test suite verifies:
-- Registration and login functionality
-- Goal creation and database persistence
-- Completed goals display
-- Profile summaries and course tracking
-
-StudyBuddy includes <b>7 meaningful unit test cases</b> covering authentication, goal creation, editing, completion history, profile logic, and model defaults. All tests pass successfully in M2:
-
-<img width="612" height="323" alt="Screenshot 2025-12-08 at 8 37 05 PM" src="https://github.com/user-attachments/assets/0af68177-cdef-48f1-acc5-690b1bb82ff7" />
+If your browser incorrectly caches a 403, try an incognito window.
 
 
-## Screenshots
-#### Home Page
+# **Running Tests**
 
-<img width="1684" height="882" alt="Screenshot 2025-12-08 at 8 30 33 PM" src="https://github.com/user-attachments/assets/a01648ea-92e1-4ddd-97aa-cdd0a835a81b" />
+Run all tests:
+
+```bash
+pytest -v
+```
+
+Run with coverage:
+
+```bash
+pytest --cov=app --cov-report=term-missing
+```
+
+### 🧾 **Test Suite Summary**
+
+* **16 tests passed**
+* **91% total coverage**
+
+  * 95% model coverage
+  * 80%+ route coverage
+* Tests cover:
+
+  * Authentication
+  * Goal CRUD
+  * Reflections
+  * Profile analytics
+  * Study groups
+  * Nudges
+  * 404 error
+  * Unauthorized access
 
 
-#### Goals Dashboard
+# **Screenshots (Include in your PDF submission)**
 
-<img width="1685" height="829" alt="Screenshot 2025-12-08 at 8 30 43 PM" src="https://github.com/user-attachments/assets/e6e81fdc-650a-46e8-8301-bb0e3955a7f8" />
-
-
-#### Edit Goal Page
-
-<img width="1676" height="781" alt="Screenshot 2025-12-08 at 8 30 58 PM" src="https://github.com/user-attachments/assets/2eea45b2-444c-478b-a272-3cc8c8b3d3b3" />
+Screenshots:
 
 
-#### Completed Goals
+1. Home Page
+   
+<img width="627" height="330" alt="Screenshot 2025-12-16 at 11 38 31 PM" src="https://github.com/user-attachments/assets/ab330826-fced-4435-8423-bf491e52e0f2" />
 
-<img width="1684" height="751" alt="Screenshot 2025-12-08 at 8 31 16 PM" src="https://github.com/user-attachments/assets/40ccdb98-f686-4edc-8eb7-d4af72c047d3" />
+2. Goals Dashboard
+   
+   <img width="623" height="281" alt="Screenshot 2025-12-16 at 11 38 55 PM" src="https://github.com/user-attachments/assets/1e146fe4-532f-4b6c-8aea-993436e4bb76" />
 
-## Milestone 2 Summary
+3. Profile Page (streak + activity chart + Canvas link)
+   
+   <img width="624" height="311" alt="Screenshot 2025-12-16 at 11 39 08 PM" src="https://github.com/user-attachments/assets/ef536689-f1db-4f1e-993f-d97751656176" />
 
-Compared to M1, this milestone introduces:
-- Fully functional authentication system
-- SQLAlchemy-backed models and persistence
-- Goal creation, editing, completion, and tagging
-- Profile and completed-goals pages
-- Consistent UI styling with shared templates
-- Working pytest suite with isolated temporary databases
+4. Study Group Page (members + nudges)
 
-This milestone delivers a functional early version of StudyBuddy, covering 75% of planned MVP features.
+<img width="627" height="295" alt="Screenshot 2025-12-16 at 11 39 22 PM" src="https://github.com/user-attachments/assets/d2fa77c9-dbf9-4fad-9889-14a664c3f6db" />
 
-## Roles:
-Gaurav: Responsible for backend development, including Flask routing, SQLAlchemy models, authentication, and goal management logic.
-Brenda: Responsible for frontend design, including UI styling, templates, layout, and improving overall user experience across the app.
+
+# **Milestone 3 Summary**
+
+Compared to Milestone 2, this release adds:
+
+* Complete TailwindCSS UI overhaul
+* Study streak tracking
+* 7-day activity chart
+* Canvas LMS URL integration
+* Study groups + member directories
+* Peer nudges
+* Full integration test suite
+* 91% code coverage
+
+StudyBuddy is now a fully functional, data-persistent, well-tested MVP suitable for student goal tracking and habit formation.
+
+# **Roles**
+
+**Gaurav** – Backend development: Flask routing, SQLAlchemy models, authentication, study groups, analytics, integration tests.
+
+**Brenda** – Frontend development: TailwindCSS UI design, templates, layout, UX improvements.
+
